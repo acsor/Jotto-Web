@@ -1,2 +1,5 @@
 workspace.xml
+tools.xml
 *.sw[po]
+**/.pyc
+**/__pycache__
