@@ -10,10 +10,6 @@
             display: block;
         }
 
-        body > nav {
-            margin: 6px;
-        }
-
         main {
             margin: 6px;
             padding: 6px;
@@ -33,7 +29,7 @@
         <ol>
             {% block sidebar %}
                 <li><a href="{% url 'jotto:index' %}">Index</a></li>
-                <li><a href="{% url 'jotto:new_session' %}">New game</a></li>
+                <li><a href="{% url 'jotto:pre_session' %}">New game</a></li>
             {% endblock %}
         </ol>
     </nav>

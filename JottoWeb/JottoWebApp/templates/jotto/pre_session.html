@@ -1,0 +1,12 @@
+{% extends "jotto/base.html" %}
+
+{% block title %}New game | {{ block.super }}{% endblock %}
+
+{% block content %}
+    <h3>New game</h3>
+
+    <p>
+        You are about to start a new Jotto game. Are you sure?<br>
+        <a href="{% url 'jotto:new_session' %}">Start new game</a>.
+    </p>
+{% endblock %}

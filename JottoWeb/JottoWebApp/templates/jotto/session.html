@@ -1,0 +1,11 @@
+{% extends "jotto/base.html" %}
+
+{% block title %}
+    Game {{ session.id }} | {{ block.super }}
+{% endblock %}
+
+{% block content %}
+    <p>
+        Playing game n&deg; {{ session.id }}.
+    </p>
+{% endblock %}

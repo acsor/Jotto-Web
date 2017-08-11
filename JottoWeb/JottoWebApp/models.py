@@ -12,6 +12,7 @@ class Puzzle(models.Model):
 
 class Session(models.Model):
     puzzle = models.ForeignKey(Puzzle, on_delete=models.CASCADE)
+    # TO-DO Add an is_closed field no mark ended sessions
 
     def __repr__(self):
         pass
