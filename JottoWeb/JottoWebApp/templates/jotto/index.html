@@ -1,0 +1,32 @@
+{% extends "jotto/base.html" %}
+
+{% block title %}Home | {{ block.super }}{% endblock %}
+
+{% block content %}
+    <h1>Jotto Web app</h1>
+
+    <h3><a href="{% url 'jotto:new_session' %}">Start a new game</a></h3>
+
+    <h3>Description</h3>
+    <p>
+        The aim of playing Jotto is guessing a secret word. Classically, a word in Jotto can only contain
+        five letters, but in this variation of the game the length of a word, which is always communicated
+        to the user, can change depending on the random word chosen from the database.<br><br>
+
+        At each step, the user is given the chance to submit a <i>guess</i> to the secret word. This
+        guess word must be of the same length of the hidden word, otherwise an error message notifies the
+        user that they have submitted a wrong guess.<br><br>
+
+        When a guess to the secret word satisfies all the validity conditions (namely, same length)
+        the screen will display the number of <b>common letters</b> shared by the two words, and the count
+        of <b>equal letters with equal position</b> inside both words. By combining the information from
+        both fields, the user can infer what word is to be guessed and be informed when they win the game.<br><br>
+
+        When the guessed word is right, the program (more exactly, the server) will reply with a
+        <b>common letters</b> and <b>equal letters with equal position</b> fields equal between them
+        and the length of the secret word (already known beforehand).<br><br>
+
+        The <a href="https://en.wikipedia.org/wiki/Jotto">Jotto Wikipedia article</a> describes this logic
+        word game more carefully.
+    </p>
+{% endblock %}

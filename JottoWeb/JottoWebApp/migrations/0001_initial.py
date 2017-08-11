@@ -37,7 +37,7 @@ class Migration(migrations.Migration):
         ),
         migrations.AddField(
             model_name='guess',
-            name='session',
+            name='new_session',
             field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='JottoWebApp.Session'),
         ),
     ]

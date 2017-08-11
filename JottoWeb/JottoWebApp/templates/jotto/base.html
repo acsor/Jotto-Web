@@ -1,0 +1,53 @@
+<!doctype HTML>
+
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Jotto Web{% endblock %}</title>
+
+    <style>
+        nav, main, footer {
+            display: block;
+        }
+
+        body > nav {
+            margin: 6px;
+        }
+
+        main {
+            margin: 6px;
+            padding: 6px;
+        }
+
+        footer {
+            font-size: 80%;
+            background-color: lightgray;
+            padding: 6px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <ol>
+            {% block sidebar %}
+                <li><a href="{% url 'jotto:index' %}">Index</a></li>
+                <li><a href="{% url 'jotto:new_session' %}">New game</a></li>
+            {% endblock %}
+        </ol>
+    </nav>
+
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer>
+        Jotto Web was inspired by the assignment 7 of the MIT
+        <a href="http://dspace.mit.edu/handle/1721.1/106923">OCW 6.005 course, 2011 version</a>.<br>
+        Its source code is available on <a href="https://github.com/newnone/">GitHub</a> for open viewing and
+        contributions.
+    </footer>
+</body>
+</html>
