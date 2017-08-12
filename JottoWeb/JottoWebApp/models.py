@@ -1,5 +1,6 @@
 from django.db.models import CharField
 from django.db import models
+from django.utils import timezone
 from .utils import in_common, correct_position
 
 
@@ -12,28 +13,35 @@ class Puzzle(models.Model):
 
 class Session(models.Model):
     puzzle = models.ForeignKey(Puzzle, on_delete=models.CASCADE)
-    # TO-DO Add an is_closed field no mark ended sessions
-
-    def __repr__(self):
-        pass
-
-
-# noinspection PyUnresolvedReferences
-class Guess(models.Model):
-    guess = models.CharField(max_length=128)  # TO-DO See if it is possible to avoid this hardcoded value
-    session = models.ForeignKey(Session, on_delete=models.CASCADE)
+    start_date = models.DateTimeField(default=timezone.now)
+    end_date = models.DateTimeField(null=True)
 
     def __str__(self):
-        return self.guess
+        return self.puzzle.name
+
+    def guesses_by_newest(self):
+        """
+        :return: the list of guesses associated with the session, ordered from newest to oldest.
+        """
+        # TO-DO Find a better way to integrate this ordering with the Django template system
+        return self.guess_set.order_by("-time")
+
+
+class Guess(models.Model):
+    # TO-DO See if it is possible to avoid this hardcoded value (max_length=128)
+    name = models.CharField(max_length=128, editable=False)
+    session = models.ForeignKey(Session, on_delete=models.CASCADE)
+    time = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return self.name
 
     def common(self):
-        session = Session.objects.get(id=self.session)
-        hidden = Puzzle.get(id=session.puzzle)
+        hidden = Puzzle.objects.get(id=self.session.puzzle.id)
 
-        return in_common(self.guess, hidden.name)
+        return in_common(self.name, hidden.name)
 
     def correct_position(self):
-        session = Session.objects.get(id=self.session)
-        hidden = Puzzle.get(id=session.puzzle)
+        hidden = Puzzle.objects.get(id=self.session.puzzle.id)
 
-        return correct_position(self.guess, hidden)
+        return correct_position(self.name, hidden.name)

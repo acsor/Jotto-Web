@@ -4,8 +4,50 @@
     Game {{ session.id }} | {{ block.super }}
 {% endblock %}
 
+{% block sidebar %}
+    {{ block.super }}
+    <li><a href="TO-DO implement here">End game</a></li>
+{% endblock %}
+
 {% block content %}
-    <p>
-        Playing game n&deg; {{ session.id }}.
+    <p style="content-align: center">
+        <h3>Game {{ session.id }}</h3>
+
+        <p>
+            Word length: {{ session.puzzle.name | length }}.<br>
+
+            {% if session.guess_set.all %}
+                <table id="guesses">
+                    <thead>
+                        <caption>Guess log</caption>
+                        <tr>
+                            <th>Guess</th>
+                            <th>In common</th>
+                            <th>Correct pos.</th>
+                            <th>Extra</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for g in session.guesses_by_newest %}
+                            <tr>
+                                <td>{{ g.name }} ({{ g.name|length }})</td>
+                                {% if session.puzzle.name|length == g.name|length %}
+                                    <td>{{ g.common }}</td>
+                                    <td>{{ g.correct_position }}</td>
+                                    <td></td>
+                                {% else %}
+                                    <td></td>
+                                    <td></td>
+                                    <td class="error">Unequal lengths</td>
+                                {% endif %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                Submit a guess to start playing.
+            {% endif %}
+        </p>
     </p>
 {% endblock %}

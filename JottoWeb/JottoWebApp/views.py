@@ -20,6 +20,7 @@ def pre_session(request):
 
 
 def new_session(request):
+    # TO-DO Find a more fast-performing alternative to this.
     puzzles = Puzzle.objects.all()
     puzzle = puzzles[randint(0, puzzles.count())]
 
