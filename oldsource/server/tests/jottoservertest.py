@@ -1,6 +1,7 @@
 import unittest
 from unittest import TestCase
-from server.jottoserver import SuccessfulResponse
+
+from oldsource.server.jottoserver import SuccessfulResponse
 
 
 class JottoServerTest(TestCase):

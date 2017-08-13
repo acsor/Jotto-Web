@@ -3,7 +3,7 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 from linecache import getline
 from urllib.parse import parse_qs
 
-from JottoWeb.JottoWebApp.utils import lines_count
+from JottoWebApp.utils import lines_count
 
 
 @unique
