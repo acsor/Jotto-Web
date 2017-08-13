@@ -1,7 +1,8 @@
-from django.shortcuts import render, loader, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import loader, get_object_or_404
 from django.urls import reverse
-from random import randint
+from django.utils import timezone
+
 from .models import Session, Puzzle
 
 
@@ -20,11 +21,7 @@ def pre_session(request):
 
 
 def new_session(request):
-    # TO-DO Find a more fast-performing alternative to this.
-    puzzles = Puzzle.objects.all()
-    puzzle = puzzles[randint(0, puzzles.count())]
-
-    del puzzles
+    puzzle = Puzzle.get_random()
 
     curr_session = Session(puzzle=puzzle)
     curr_session.save()
@@ -40,3 +37,20 @@ def session(request, session_id):
     }
 
     return HttpResponse(template.render(context, request))
+
+
+def close_session(request, session_id):
+    session = get_object_or_404(Session, id=session_id)
+    template = loader.get_template("jotto/post_close_session.html")
+    var_error = "error_already_ended"
+    config = {
+        "session": session,
+    }
+
+    if session.end_date is None:
+        session.end_date = timezone.localtime()
+        session.save()
+    else:
+        config[var_error] = True
+
+    return HttpResponse(template.render(config, request))

@@ -6,7 +6,7 @@
 
 {% block sidebar %}
     {{ block.super }}
-    <li><a href="TO-DO implement here">End game</a></li>
+    <li><a href="{% url 'jotto:close_session' session.id %}">End game</a></li>
 {% endblock %}
 
 {% block content %}

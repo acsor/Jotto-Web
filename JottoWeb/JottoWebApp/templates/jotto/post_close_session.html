@@ -1,0 +1,23 @@
+{% extends "jotto/base.html" %}
+
+{% block title %}
+    {% if not error_already_ended %}
+        Thank you for playing
+    {% else %}
+        Error: game {{ session.id }} already closed
+    {% endif %}
+    | {{ block.super }}
+{% endblock %}
+
+{% block content %}
+    {% if not error_already_ended %}
+        <p>
+            Congrats! Game number {{ session.id }} was marked as closed on {{ session.end_date }}.
+        </p>
+    {% else %}
+        <h3 class="error">An error occurred</h3>
+        <p class="error">
+            Game {{ session.id }} has been already closed.
+        </p>
+    {% endif %}
+{% endblock %}

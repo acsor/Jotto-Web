@@ -1,6 +1,7 @@
 from django.db.models import CharField
 from django.db import models
 from django.utils import timezone
+from random import randint
 from .utils import in_common, correct_position
 
 
@@ -10,10 +11,20 @@ class Puzzle(models.Model):
     def __str__(self):
         return self.name
 
+    @classmethod
+    def get_random(cls):
+        # TO-DO Find a more fast-performing alternative to this.
+        puzzles = cls.objects.all()
+        puzzle = puzzles[randint(0, puzzles.count())]
+
+        del puzzles
+
+        return puzzle
+
 
 class Session(models.Model):
     puzzle = models.ForeignKey(Puzzle, on_delete=models.CASCADE)
-    start_date = models.DateTimeField(default=timezone.now)
+    start_date = models.DateTimeField(default=timezone.localtime)
     end_date = models.DateTimeField(null=True)
 
     def __str__(self):
@@ -31,7 +42,7 @@ class Guess(models.Model):
     # TO-DO See if it is possible to avoid this hardcoded value (max_length=128)
     name = models.CharField(max_length=128, editable=False)
     session = models.ForeignKey(Session, on_delete=models.CASCADE)
-    time = models.DateTimeField(default=timezone.now)
+    time = models.DateTimeField(default=timezone.localtime)
 
     def __str__(self):
         return self.name

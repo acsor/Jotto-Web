@@ -3,3 +3,4 @@ tools.xml
 *.sw[po]
 **/.pyc
 **/__pycache__
+**/changelist
