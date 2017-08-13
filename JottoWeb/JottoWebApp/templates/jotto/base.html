@@ -53,6 +53,7 @@
             {% block sidebar %}
                 <li><a href="{% url 'jotto:index' %}">Index</a></li>
                 <li><a href="{% url 'jotto:pre_session' %}">New game</a></li>
+                <li><a href="{% url 'jotto:sessions_still_open' %}">Games still open</a></li>
             {% endblock %}
         </ol>
     </nav>

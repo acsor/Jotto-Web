@@ -43,7 +43,7 @@ def close_session(request, session_id):
     session = get_object_or_404(Session, id=session_id)
     template = loader.get_template("jotto/post_close_session.html")
     var_error = "error_already_ended"
-    config = {
+    context = {
         "session": session,
     }
 
@@ -51,6 +51,15 @@ def close_session(request, session_id):
         session.end_date = timezone.localtime()
         session.save()
     else:
-        config[var_error] = True
+        context[var_error] = True
 
-    return HttpResponse(template.render(config, request))
+    return HttpResponse(template.render(context, request))
+
+
+def sessions_still_open(request):
+    template = loader.get_template("jotto/sessions_still_open.html")
+    context = {
+        "open_sessions": [s for s in Session.objects.all() if s.end_date is None]
+    }
+
+    return HttpResponse(template.render(context, request))

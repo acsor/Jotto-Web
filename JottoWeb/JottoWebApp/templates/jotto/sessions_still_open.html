@@ -1,0 +1,18 @@
+{% extends "jotto/base.html" %}
+
+{% block title %}Games still open | {{ block.super}}{% endblock %}
+
+{% block content %}
+    <p>
+        {% if open_sessions %}
+            <h3>{{ open_sessions|length }} games still open</h3>
+            <ul>
+                {% for s in open_sessions %}
+                    <li><a href="{% url 'jotto:session' s.id %}">Game {{ s.id }}</a></li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            There are no open games to display.
+        {% endif %}
+    </p>
+{% endblock %}
