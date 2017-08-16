@@ -15,8 +15,8 @@
             Congrats! Game number {{ session.id }} was marked as closed on {{ session.end_date }}.
         </p>
     {% else %}
-        <h3 class="error">An error occurred</h3>
-        <p class="error">
+        <h3 class="status_error">An error occurred</h3>
+        <p class="status_error">
             Game {{ session.id }} has been already closed.
         </p>
     {% endif %}

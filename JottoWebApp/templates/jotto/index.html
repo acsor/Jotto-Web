@@ -13,16 +13,16 @@
         five letters, but in this variation of the game the length of a word, which is always communicated
         to the user, can change depending on the random word chosen from the database.<br><br>
 
-        At each step, the user is given the chance to submit a <i>guess</i> to the secret word. This
-        guess word must be of the same length of the hidden word, otherwise an error message notifies the
-        user that they have submitted a wrong guess.<br><br>
+        At each step, the user is given the chance to submit a <i>guess</i> to the secret word. The length
+	of the guess and that of the hidden word must match, otherwise an error message notifies the
+        user that they have submitted an invalid guess.<br><br>
 
         When a guess to the secret word satisfies all the validity conditions (namely, same length)
         the screen will display the number of <b>common letters</b> shared by the two words, and the count
         of <b>equal letters with equal position</b> inside both words. By combining the information from
         both fields, the user can infer what word is to be guessed and be informed when they win the game.<br><br>
 
-        When the guessed word is right, the program (more exactly, the server) will reply with a
+        When the guessed word is correct, the program (more exactly, the server) will reply with a
         <b>common letters</b> and <b>equal letters with equal position</b> fields equal between them
         and the length of the secret word (already known beforehand).<br><br>
 

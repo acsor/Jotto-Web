@@ -1,9 +1,10 @@
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
+from django.http.response import HttpResponseNotAllowed
 from django.shortcuts import loader, get_object_or_404
 from django.urls import reverse
 from django.utils import timezone
 
-from .models import Session, Puzzle
+from .models import Puzzle, Session, Guess
 
 
 # TO-DO Update the view functions by using the default view classes
@@ -63,3 +64,23 @@ def sessions_still_open(request):
     }
 
     return HttpResponse(template.render(context, request))
+
+
+def session_guess(request: HttpRequest, session_id):
+    # TO-DO Validate against empty and unaccepted values (e.g. numbers or words with letters not in the alphabet.)
+    session = get_object_or_404(Session, id=session_id)
+    param_guess = "guess"
+    param_error = "error"
+
+    if session.end_date is not None:
+        template = loader.get_template("jotto/error.html")
+        context = {
+            param_error: "Game %d was closed. You cannot add any more guesses." % session.id
+        }
+
+        return HttpResponseNotAllowed(("GET", "POST"), template.render(context, request))
+
+    guess = Guess(name=request.GET[param_guess], session=session)
+    guess.save()
+
+    return HttpResponseRedirect(reverse("jotto:session", args=(session.id,)))

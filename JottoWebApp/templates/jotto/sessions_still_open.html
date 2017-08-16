@@ -12,7 +12,8 @@
                 {% endfor %}
             </ul>
         {% else %}
-            There are no open games to display.
+            There are no open games to display.<br>
+            If you wish, you can <a href="{% url 'jotto:pre_session' %}">start a new game</a>.
         {% endif %}
     </p>
 {% endblock %}

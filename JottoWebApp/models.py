@@ -1,7 +1,11 @@
-from django.db.models import CharField
-from django.db import models
-from django.utils import timezone
+import re
 from random import randint
+
+from django.core.exceptions import ValidationError
+from django.db import models
+from django.db.models import CharField
+from django.utils import timezone
+
 from .utils import in_common, correct_position
 
 
@@ -41,8 +45,12 @@ class Session(models.Model):
 class Guess(models.Model):
     # TO-DO See if it is possible to avoid this hardcoded value (max_length=128)
     name = models.CharField(max_length=128, editable=False)
+    # TO-DO Enable data validation in this and even other models
+    # name = models.CharField(max_length=128, editable=False, validators=(validate_name,))
     session = models.ForeignKey(Session, on_delete=models.CASCADE)
     time = models.DateTimeField(default=timezone.localtime)
+    # TO-DO replace this pattern with a Unicode-compatible one, such as \p{L}
+    re_name = re.compile("[a-zA-Z]+")
 
     def __str__(self):
         return self.name
@@ -56,3 +64,10 @@ class Guess(models.Model):
         hidden = Puzzle.objects.get(id=self.session.puzzle.id)
 
         return correct_position(self.name, hidden.name)
+
+
+def validate_name(name):
+    if len(name) == 0:
+        raise ValidationError("Input string has zero length.")
+    if re.fullmatch(Guess.re_name, name) is None:
+        raise ValidationError("Input is not a valid string.")

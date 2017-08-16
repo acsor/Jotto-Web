@@ -1,0 +1,9 @@
+{% extends "jotto/base.html" %}
+
+{% block title %}Error | {{ block.super }}{% endblock %}
+
+{% block content %}
+    <p class="status_error" style="text-align: center;">
+        {{ error }}
+    </p>
+{% endblock %}
