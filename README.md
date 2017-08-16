@@ -11,6 +11,6 @@ a bit outdated, and even because I was more interested in developing with Python
 language.
 
 ## Usage
-To run this project a basic knowledge of the Django framework is recommended. To do it locate the `manage.py` file and
+To run this project no knowledge of Django or other frameworks is required. To do it locate the `manage.py` file and
 type on a console (or on a run configuration) `python manage.py runserver`. The initial output should
 display the port at which the Web server is listening.
