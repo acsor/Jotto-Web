@@ -3,17 +3,19 @@
 {% block title %}Games still open | {{ block.super}}{% endblock %}
 
 {% block content %}
-    <p>
-        {% if open_sessions %}
-            <h3>{{ open_sessions|length }} games still open</h3>
+    {% if sessions %}
+        <div>
+            <h3>{{ sessions|length }} games still open</h3>
             <ul>
-                {% for s in open_sessions %}
+                {% for s in sessions %}
                     <li><a href="{% url 'jotto:session' s.id %}">Game {{ s.id }}</a></li>
                 {% endfor %}
             </ul>
-        {% else %}
+        </div>
+    {% else %}
+        <p>
             There are no open games to display.<br>
             If you wish, you can <a href="{% url 'jotto:pre_session' %}">start a new game</a>.
-        {% endif %}
-    </p>
+        </p>
+    {% endif %}
 {% endblock %}

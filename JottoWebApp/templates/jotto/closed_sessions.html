@@ -1,0 +1,21 @@
+{% extends "jotto/base.html" %}
+
+{% block title %}Closed games | {{ block.super }}{% endblock %}
+
+{% block content %}
+    {% if sessions %}
+        <div>
+            <h3>{{ sessions|length }} games played</h3>
+            <ul>
+                {% for s in sessions %}
+                    <li><a href="{% url 'jotto:session' s.id %}">Game {{ s.id }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% else %}
+        <p>
+            No games have still been opened.<br>
+            If you wish, you can <a href="{% url 'jotto:pre_session' %}">start a new game</a>.
+        </p>
+    {% endif %}
+{% endblock %}

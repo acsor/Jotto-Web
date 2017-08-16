@@ -65,9 +65,9 @@ class Guess(models.Model):
 
         return correct_position(self.name, hidden.name)
 
-
-def validate_name(name):
-    if len(name) == 0:
-        raise ValidationError("Input string has zero length.")
-    if re.fullmatch(Guess.re_name, name) is None:
-        raise ValidationError("Input is not a valid string.")
+    @staticmethod
+    def validate_name(name):
+        if len(name) == 0:
+            raise ValidationError("Input string has zero length.")
+        if re.fullmatch(Guess.re_name, name) is None:
+            raise ValidationError("Input is not a valid string.")

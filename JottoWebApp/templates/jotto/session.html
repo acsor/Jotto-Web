@@ -21,7 +21,7 @@
         </h3>
 
         <p>
-            Word length: {{ session.puzzle.name | length }}.<br>
+            Word length: {{ session.puzzle.name|length }}.<br>
         </p>
 
         <form action="{% url 'jotto:session_guess' session.id %}" method="GET">
@@ -38,14 +38,15 @@
         </form>
 
         <div id="session_results">
-            {% if session.guess_set.all %}
+            {% if session.end_date %}
+                <p class="status_notice"><strong>Game archived - you cannot guess anymore</strong></p>
+            {% endif %}
+
+            {% if session.guesses_by_newest %}
                 <table>
                     <thead>
                         <caption>
                             Guess log ({{ session.guess_set.all|length }})
-                            {% if session.end_date %}
-                                <br><span class="status_notice">Game archived - you cannot guess anymore</span>
-                            {% endif %}
                         </caption>
                         <tr>
                             <th>Guess</th>
@@ -76,7 +77,7 @@
                         {% endfor %}
                     </tbody>
                 </table>
-            {% else %}
+            {% elif not session.end_date %}
                 <p>Submit a guess to start playing.</p>
             {% endif %}
         </div>

@@ -57,10 +57,21 @@ def close_session(request, session_id):
     return HttpResponse(template.render(context, request))
 
 
-def sessions_still_open(request):
-    template = loader.get_template("jotto/sessions_still_open.html")
+def open_sessions(request):
+    template = loader.get_template("jotto/open_sessions.html")
     context = {
-        "open_sessions": [s for s in Session.objects.all() if s.end_date is None]
+        "sessions": [s for s in Session.objects.order_by("-start_date") if s.end_date is None]
+    }
+
+    return HttpResponse(template.render(context, request))
+
+
+def closed_sessions(request):
+    template = loader.get_template("jotto/closed_sessions.html")
+    context = {
+        # TO-DO Add a more refined boolean condition in this list comprehension (e.g. check if date comes before now,
+        # not if it just isn't None).
+        "sessions": [s for s in Session.objects.order_by("-start_date") if s.end_date is not None],
     }
 
     return HttpResponse(template.render(context, request))
