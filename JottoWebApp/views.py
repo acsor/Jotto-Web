@@ -43,16 +43,16 @@ def session(request, session_id):
 def close_session(request, session_id):
     session = get_object_or_404(Session, id=session_id)
     template = loader.get_template("jotto/post_close_session.html")
-    var_error = "error_already_ended"
+    param_error = "error_already_closed"
     context = {
         "session": session,
     }
 
-    if session.end_date is None:
+    if not session.is_closed():
         session.end_date = timezone.localtime()
         session.save()
     else:
-        context[var_error] = True
+        context[param_error] = True
 
     return HttpResponse(template.render(context, request))
 
@@ -60,7 +60,7 @@ def close_session(request, session_id):
 def open_sessions(request):
     template = loader.get_template("jotto/open_sessions.html")
     context = {
-        "sessions": [s for s in Session.objects.order_by("-start_date") if s.end_date is None]
+        "sessions": [s for s in Session.objects.order_by("-start_date") if not s.is_closed()]
     }
 
     return HttpResponse(template.render(context, request))
@@ -69,9 +69,7 @@ def open_sessions(request):
 def closed_sessions(request):
     template = loader.get_template("jotto/closed_sessions.html")
     context = {
-        # TO-DO Add a more refined boolean condition in this list comprehension (e.g. check if date comes before now,
-        # not if it just isn't None).
-        "sessions": [s for s in Session.objects.order_by("-start_date") if s.end_date is not None],
+        "sessions": [s for s in Session.objects.order_by("-start_date") if s.is_closed()],
     }
 
     return HttpResponse(template.render(context, request))
@@ -83,7 +81,7 @@ def session_guess(request: HttpRequest, session_id):
     param_guess = "guess"
     param_error = "error"
 
-    if session.end_date is not None:
+    if session.is_closed():
         template = loader.get_template("jotto/error.html")
         context = {
             param_error: "Game %d was closed. You cannot add any more guesses." % session.id

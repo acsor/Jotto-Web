@@ -41,6 +41,9 @@ class Session(models.Model):
         # TO-DO Find a better way to integrate this ordering with the Django template system
         return self.guess_set.order_by("-time")
 
+    def is_closed(self):
+        return self.end_date is not None and self.end_date <= timezone.now()
+
 
 class Guess(models.Model):
     # TO-DO See if it is possible to avoid this hardcoded value (max_length=128)

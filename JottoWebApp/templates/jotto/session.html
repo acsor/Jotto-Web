@@ -6,80 +6,78 @@
 
 {% block sidebar %}
     {{ block.super }}
-    {% if not session.end_date %}
+    {% if not session.is_closed %}
         <li><a href="{% url 'jotto:close_session' session.id %}">End game</a></li>
     {% endif %}
 {% endblock %}
 
 {% block content %}
-    <div>
-        <h3>
-            Game {{ session.id }}
-            {% if session.end_date %}
-                <span class="status_notice">(closed)</span>
-            {% endif %}
-        </h3>
+    <h3>
+        Game {{ session.id }}
+        {% if session.is_closed %}
+            <span class="status_notice">(closed)</span>
+        {% endif %}
+    </h3>
 
-        <p>
-            Word length: {{ session.puzzle.name|length }}.<br>
-        </p>
+    <h4>
+        Word length: {{ session.puzzle.name|length }}.<br>
+    </h4>
 
-        <form action="{% url 'jotto:session_guess' session.id %}" method="GET">
-            <label>
-                Your guess:
-                <input id="input_guess" type="text" name="guess"
-                       placeholder="{{ session.puzzle.name|length}} character-long string"
-                       {% if session.end_date %} disabled {% endif %} autofocus
-                />
-            </label><br>
-            <input id="input_submit" type="submit" value="Submit"
-                   {% if session.end_date %} disabled {% endif %}
+    <form action="{% url 'jotto:session_guess' session.id %}" method="GET">
+        <label>
+            Your guess:
+            <input id="input_guess" type="text" name="guess"
+                   placeholder="{{ session.puzzle.name|length}} character-long string"
+                   {% if session.is_closed %} disabled {% endif %} autofocus
             />
-        </form>
+        </label><br>
+        <input id="input_submit" type="submit" value="Submit"
+               {% if session.is_closed %} disabled {% endif %}
+        />
+    </form>
 
-        <div id="session_results">
-            {% if session.end_date %}
-                <p class="status_notice"><strong>Game archived - you cannot guess anymore</strong></p>
-            {% endif %}
+    <div id="session_results">
+        {% if session.is_closed %}
+            <h4 class="status_notice">Game archived - you cannot guess anymore</h4>
+        {% endif %}
 
-            {% if session.guesses_by_newest %}
-                <table>
-                    <thead>
-                        <caption>
-                            Guess log ({{ session.guess_set.all|length }})
-                        </caption>
+        {% if session.guesses_by_newest %}
+            <table>
+                <thead>
+                    <caption>
+                        Guess log ({{ session.guesses_by_newest|length }})
+                    </caption>
+                    <tr>
+                        <th>Guess</th>
+                        <th>In common</th>
+                        <th>Correct pos.</th>
+                        <th>Extra</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for g in session.guesses_by_newest %}
                         <tr>
-                            <th>Guess</th>
-                            <th>In common</th>
-                            <th>Correct pos.</th>
-                            <th>Extra</th>
+                            <td>{{ g.name }} ({{ g.name|length }})</td>
+                            {% if session.puzzle.name|length == g.name|length %}
+                                <td>{{ g.common }}</td>
+                                <td>{{ g.correct_position }}</td>
+                                <td>
+                                    {% if session.puzzle.name == g.name %}
+                                        <span class="status_success">You win!</span>
+                                    {% endif %}
+                                </td>
+                            {% else %}
+                                <td></td>
+                                <td></td>
+                                <td class="status_error">Unequal lengths</td>
+                            {% endif %}
                         </tr>
-                    </thead>
-
-                    <tbody>
-                        {% for g in session.guesses_by_newest %}
-                            <tr>
-                                <td>{{ g.name }} ({{ g.name|length }})</td>
-                                {% if session.puzzle.name|length == g.name|length %}
-                                    <td>{{ g.common }}</td>
-                                    <td>{{ g.correct_position }}</td>
-                                    <td>
-                                        {% if session.puzzle.name == g.name %}
-                                            <span class="status_success">You win!</span>
-                                        {% endif %}
-                                    </td>
-                                {% else %}
-                                    <td></td>
-                                    <td></td>
-                                    <td class="status_error">Unequal lengths</td>
-                                {% endif %}
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            {% elif not session.end_date %}
-                <p>Submit a guess to start playing.</p>
-            {% endif %}
-        </div>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% elif not session.is_closed %}
+            <p>Submit a guess to start playing.</p>
+        {% endif %}
     </div>
 {% endblock %}

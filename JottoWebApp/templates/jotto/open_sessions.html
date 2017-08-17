@@ -4,14 +4,12 @@
 
 {% block content %}
     {% if sessions %}
-        <div>
-            <h3>{{ sessions|length }} games still open</h3>
-            <ul>
-                {% for s in sessions %}
-                    <li><a href="{% url 'jotto:session' s.id %}">Game {{ s.id }}</a></li>
-                {% endfor %}
-            </ul>
-        </div>
+        <h3>{{ sessions|length }} games still open</h3>
+        <ul>
+            {% for s in sessions %}
+                <li><a href="{% url 'jotto:session' s.id %}">Game {{ s.id }}</a></li>
+            {% endfor %}
+        </ul>
     {% else %}
         <p>
             There are no open games to display.<br>
