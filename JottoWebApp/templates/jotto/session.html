@@ -7,7 +7,7 @@
 {% block sidebar %}
     {{ block.super }}
     {% if not session.is_closed %}
-        <li><a href="{% url 'jotto:close_session' session.id %}">End game</a></li>
+        <li><a href="{% url 'jotto:session_close' session.id %}">End game</a></li>
     {% endif %}
 {% endblock %}
 

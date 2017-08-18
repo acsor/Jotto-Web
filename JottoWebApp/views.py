@@ -3,44 +3,42 @@ from django.http.response import HttpResponseNotAllowed
 from django.shortcuts import loader, get_object_or_404
 from django.urls import reverse
 from django.utils import timezone
+from django.views.generic import DetailView, ListView, TemplateView
+
 
 from .models import Puzzle, Session, Guess
 
 
 # TO-DO Update the view functions by using the default view classes
 # as described in the Django tutorial, part 4.
-def index(request):
-    template = loader.get_template("jotto/index.html")
-
-    return HttpResponse(template.render(dict(), request))
+class IndexView(TemplateView):
+    template_name = "jotto/index.html"
 
 
-def pre_session(request):
-    template = loader.get_template("jotto/pre_session.html")
-
-    return HttpResponse(template.render(dict(), request))
+class PreSessionView(TemplateView):
+    template_name = "jotto/pre_session.html"
 
 
-def new_session(request):
+def session_new(request):
     puzzle = Puzzle.get_random()
 
-    curr_session = Session(puzzle=puzzle)
-    curr_session.save()
+    session = Session(puzzle=puzzle)
+    session.save()
 
-    return HttpResponseRedirect(reverse("jotto:session", args=(curr_session.id,)))
-
-
-def session(request, session_id):
-    session = get_object_or_404(Session, id=session_id)
-    template = loader.get_template("jotto/session.html")
-    context = {
-        "session": session,
-    }
-
-    return HttpResponse(template.render(context, request))
+    return HttpResponseRedirect(reverse("jotto:session", args=(session.id,)))
 
 
-def close_session(request, session_id):
+class SessionView(TemplateView):
+    template_name = "jotto/session.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(SessionView, self).get_context_data(**kwargs)
+        context["session"] = get_object_or_404(Session, id=self.kwargs["pk"])
+
+        return context
+
+
+def session_close(request, session_id):
     session = get_object_or_404(Session, id=session_id)
     template = loader.get_template("jotto/post_close_session.html")
     param_error = "error_already_closed"
@@ -57,22 +55,20 @@ def close_session(request, session_id):
     return HttpResponse(template.render(context, request))
 
 
-def open_sessions(request):
-    template = loader.get_template("jotto/open_sessions.html")
-    context = {
-        "sessions": [s for s in Session.objects.order_by("-start_date") if not s.is_closed()]
-    }
+class OpenSessionsView(ListView):
+    template_name = "jotto/open_sessions.html"
+    context_object_name = "sessions"
 
-    return HttpResponse(template.render(context, request))
+    def get_queryset(self):
+        return [s for s in Session.objects.order_by("-start_date") if not s.is_closed()]
 
 
-def closed_sessions(request):
-    template = loader.get_template("jotto/closed_sessions.html")
-    context = {
-        "sessions": [s for s in Session.objects.order_by("-start_date") if s.is_closed()],
-    }
+class ClosedSessionsView(ListView):
+    template_name = "jotto/closed_sessions.html"
+    context_object_name = "sessions"
 
-    return HttpResponse(template.render(context, request))
+    def get_queryset(self):
+        return [s for s in Session.objects.order_by("-start_date") if s.is_closed()]
 
 
 def session_guess(request: HttpRequest, session_id):
