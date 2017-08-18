@@ -4,3 +4,4 @@ tools.xml
 **/.pyc
 **/__pycache__
 **/changelist
+*.xcf

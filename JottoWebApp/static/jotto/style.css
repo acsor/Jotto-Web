@@ -1,0 +1,56 @@
+nav, main, footer {
+    display: block;
+}
+
+main {
+    margin: 6px;
+    padding: 6px;
+}
+
+footer {
+    font-size: 80%;
+    background-color: lightgray;
+    padding: 6px;
+    text-align: center;
+}
+
+form input {
+    margin-top: 4px;
+    margin-bottom: 4px;
+}
+
+div#session_results > * {
+    text-align: center;
+}
+
+div#session_results > table {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+div#session_results > table th, td {
+    margin: 2px;
+    padding: 3px;
+}
+
+div#session_results > table th {
+    background-color: #DDD;
+}
+
+div#session_results > table td {
+    font-size: 93%;
+    border: 1px solid darkgray;
+}
+
+.status_success {
+    color: green;
+}
+
+.status_notice {
+    color: #D90000;
+}
+
+.status_error {
+    color: #D90000;
+}
